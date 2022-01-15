@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OSY.Model;
 using OSY.Model.ModelResident;
 using OSY.Service.ResidentServiceLayer;
+using System.Linq;
+using System.Security.Claims;
 
 namespace OSY.API.Controllers
 {
@@ -19,18 +22,39 @@ namespace OSY.API.Controllers
             mapper = _mapper;
         }
 
-        /// <summary>
-        /// KULLANICI KAYIT EKLEME
-        /// Eğer Admin ise;
-        /// İsim - Soyisim - Telefon - TC - Email - Password(değişken) - Daire - Blok - Plaka - IsAdmin
-        /// Eğer Yeni bir kullanıcı ise;
-        /// İsim - Soyisim - Telefon - TC - Email
-        /// Eğer adminin girdiği bilgi ile Kullanıcı bilgisi uyuşmuyorsa veya yoksa hata mesajı verecek,
-        /// uyuşuyorsa otomatik şifre gönderecek kullanıcıya
-        /// </summary>
+        private ResidentViewModel GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if(identity is not null)
+            {
+                var userClaims = identity.Claims;
+
+                return new ResidentViewModel
+                {
+                    Email = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    Name = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value,
+                    Surname = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value,
+                    IsAdmin = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value
+                };
+
+            }
+            return null;
+        }
+
+        // Token Test Etme / Sisteme girmiş olan  kullanıcıyı Görme
+        [HttpGet("Admins")]
+        [Authorize(Roles = "Administor")]
+        public IActionResult Admins()
+        {
+            var currentUser = GetCurrentUser();
+
+            return Ok($"Hi {currentUser.Name}, you are an {currentUser.IsAdmin}");
+        }
         
         // Daire Sakini Ekleme
         [HttpPost]
+        [Authorize(Roles = "Administor")]
         public General<ResidentViewModel> Insert([FromBody] ResidentViewModel newResident)
         {
             return residentService.Insert(newResident);//CurrentUser ın Id si birden büyükse insert edip devam edicek.
