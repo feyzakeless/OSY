@@ -1,0 +1,31 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "0a8cef9b-a0ec-4530-bb88-bdf512ec74ff": {
+      "ProjectGuid": "0a8cef9b-a0ec-4530-bb88-bdf512ec74ff",
+      "DisplayName": "OSY.API",
+      "ColorIndex": 0
+    },
+    "9d13266f-34a4-440e-945a-67dff2e6bb40": {
+      "ProjectGuid": "9d13266f-34a4-440e-945a-67dff2e6bb40",
+      "DisplayName": "OSY.DB",
+      "ColorIndex": 1
+    },
+    "4642b970-09fb-4e59-8492-b18936c7e76e": {
+      "ProjectGuid": "4642b970-09fb-4e59-8492-b18936c7e76e",
+      "DisplayName": "OSY.Model",
+      "ColorIndex": 2
+    },
+    "2072f235-c1df-468d-987c-bb29d1fc25c0": {
+      "ProjectGuid": "2072f235-c1df-468d-987c-bb29d1fc25c0",
+      "DisplayName": "OSY.Service",
+      "ColorIndex": 3
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 4
+}
