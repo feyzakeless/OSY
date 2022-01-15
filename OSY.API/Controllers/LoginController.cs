@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using OSY.DB.Entities.DataContext;
-using OSY.Model;
 using OSY.Model.ModelLogin;
 using OSY.Model.ModelResident;
 using OSY.Service.ResidentServiceLayer;
@@ -16,20 +15,13 @@ namespace OSY.API.Controllers
 {
     public class LoginController : Controller
     {
-        private IConfiguration config;
+        private IConfiguration config; //Inject configuration
         private IResidentService residentService;
-        public LoginController(IConfiguration _config, IResidentService _residentService)
+        public LoginController(IResidentService _residentService, IConfiguration _config)
         {
             config = _config;
             residentService = _residentService;
         }
-
-        /// <summary>
-        /// NORMAL LOGIN İÇİN
-        /// Login için Post işlemi gelecek
-        /// Cache e kaydedilecek , Hatun hocanın dedi tek kişi girmeyebilir mantığını unutma
-        /// Kaydolan kişinin cache bilgisi encyrited yapılarak şifrelenerek tutulacak (Tokenda tutulacak)
-        /// </summary> 
 
         /*[HttpPost("Login")]
         public General<ResidentViewModel> Login([FromBody] LoginViewModel resident)
@@ -37,14 +29,15 @@ namespace OSY.API.Controllers
             return residentService.Login(resident);
         }*/
 
-
-        [AllowAnonymous]
-        [HttpPost]
+        // Login İslemi
+        [AllowAnonymous] //Annotation for prevent authorization
+        [HttpPost("Login")]
         public IActionResult Login([FromBody] LoginViewModel userLogin)
         {
-            var user = Authenticate(userLogin);
+           
+            var user = Authenticate(userLogin); // Kimlik dogrulaması yapılır
 
-            if(user is not null)
+            if(user is not null) // Eğer dogrulama sağlandıysa token a atılır. 
             {
                 var token = Generate(user);
                 return Ok(token);
@@ -52,6 +45,7 @@ namespace OSY.API.Controllers
             return NotFound("Kullanıcı bulunamadı.");
         }
 
+        // Token Olusturma
         private string Generate(ResidentViewModel user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
@@ -67,25 +61,29 @@ namespace OSY.API.Controllers
 
             var token = new JwtSecurityToken(config["Jwt:Issuer"], config["Jwt:Audience"],
                 claims,
-                expires: System.DateTime.Now.AddMinutes(15),
+                expires: System.DateTime.Now.AddDays(1),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        // Kimlik dogrulama
         private ResidentViewModel Authenticate(LoginViewModel userLogin)
         {
-            
-            
+
+            ResidentViewModel currentUser= null;
             using (var item = new OSYContext())
             {
-                var currentUser = item.Resident.FirstOrDefault(x => x.Email == userLogin.Email && x.Password == userLogin.Password);
+                var user = item.Resident.FirstOrDefault(x => x.Email == userLogin.Email && x.Password == userLogin.Password);
 
-                if (currentUser is not null)
+                if (user is null)
                 {
-                    //return GenerateToken(currentUser);
+                    return null;
                 }
-                return null;
+
+                currentUser = new ResidentViewModel { Email = user.Email, Password = user.Password, Name = user.Name, 
+                    Surname = user.Surname, IsAdmin = user.IsAdmin };
+                return currentUser;
             }
 
         }
