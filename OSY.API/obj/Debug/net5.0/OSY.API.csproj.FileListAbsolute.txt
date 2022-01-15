@@ -132,3 +132,15 @@ C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\obj\Debug\net5.0\OSY
 C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\obj\Debug\net5.0\ref\OSY.API.dll
 C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\obj\Debug\net5.0\OSY.API.pdb
 C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\obj\Debug\net5.0\OSY.API.genruntimeconfig.cache
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\Hangfire.AspNetCore.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\Hangfire.Core.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\Hangfire.MemoryStorage.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\MailKit.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\MimeKit.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\BouncyCastle.Crypto.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\es\Hangfire.Core.resources.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\nl\Hangfire.Core.resources.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\pt-BR\Hangfire.Core.resources.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\zh-TW\Hangfire.Core.resources.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.API\bin\Debug\net5.0\zh\Hangfire.Core.resources.dll

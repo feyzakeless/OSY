@@ -18,5 +18,6 @@ namespace OSY.Model.ModelResident
         public string PlateNo { get; set; }
         public int ApartId { get; set; }
         public string IsAdmin { get; set; }
+        public bool IsSendWelcomeMail { get; set; }
     }
 }

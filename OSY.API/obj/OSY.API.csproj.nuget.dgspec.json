@@ -60,9 +60,33 @@
               "target": "Package",
               "version": "[11.0.0, )"
             },
+            "Hangfire.AspNetCore": {
+              "target": "Package",
+              "version": "[1.7.9, )"
+            },
+            "Hangfire.Core": {
+              "target": "Package",
+              "version": "[1.7.9, )"
+            },
+            "Hangfire.MemoryStorage": {
+              "target": "Package",
+              "version": "[1.7.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[5.0.4, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.15.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[5.6.3, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.15.0, )"
             }
           },
           "imports": [
@@ -286,17 +310,13 @@
               "target": "Package",
               "version": "[11.0.0, )"
             },
-            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+            "MailKit": {
               "target": "Package",
-              "version": "[5.0.4, )"
+              "version": "[1.18.0, )"
             },
-            "Microsoft.IdentityModel.Tokens": {
+            "MimeKit": {
               "target": "Package",
-              "version": "[6.15.0, )"
-            },
-            "System.IdentityModel.Tokens.Jwt": {
-              "target": "Package",
-              "version": "[6.15.0, )"
+              "version": "[1.18.0, )"
             }
           },
           "imports": [

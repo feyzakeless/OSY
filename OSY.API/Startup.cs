@@ -1,4 +1,6 @@
 using AutoMapper;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +14,9 @@ using OSY.API.Infrastucture;
 using OSY.Service.ApartmentServiceLayer;
 using OSY.Service.BillServiceLayer;
 using OSY.Service.HousingServiceLayer;
+using OSY.Service.Job;
 using OSY.Service.ResidentServiceLayer;
+using System;
 using System.Text;
 
 namespace OSY.API
@@ -45,7 +49,15 @@ namespace OSY.API
                 });
 
             services.AddMvc();
-            services.AddControllers();
+
+            //Hangfire kuruldu
+            services.AddHangfire(config =>
+                config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseDefaultTypeSerializer()
+                .UseMemoryStorage());
+
+            services.AddHangfireServer();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -63,10 +75,14 @@ namespace OSY.API
             services.AddTransient<IHousingService, HousingService>();
             services.AddTransient<IApartmentService, ApartmentService>();
             services.AddTransient<IBillService, BillService>();
+            services.AddTransient<IEmailOperations, EmailOperations>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+             IBackgroundJobClient backgroundJobClient,
+             IRecurringJobManager recurringJobManager,
+             IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -87,6 +103,13 @@ namespace OSY.API
             {
                 endpoints.MapControllers();
             });
+
+            app.UseHangfireDashboard();
+
+            backgroundJobClient.Enqueue(() => Console.WriteLine("Hello Hangfire Job!"));
+            recurringJobManager.AddOrUpdate("EmailOperation",
+                () => serviceProvider.GetService<IEmailOperations>().sendWelcomeEmail(),
+                "* * * * *"); //hergün sendEmail methodunu çalýþtýrýyoruz
         }
     }
 }

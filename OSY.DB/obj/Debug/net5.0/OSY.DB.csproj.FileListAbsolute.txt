@@ -28,3 +28,6 @@ C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.DB\obj\Debug\net5.0\OSY.
 C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.DB\obj\Debug\net5.0\ref\OSY.DB.dll
 C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.DB\obj\Debug\net5.0\OSY.DB.pdb
 C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.DB\obj\Debug\net5.0\OSY.DB.genruntimeconfig.cache
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.DB\bin\Debug\net5.0\OSY.Model.dll
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.DB\bin\Debug\net5.0\OSY.Model.pdb
+C:\Users\Feyza\Desktop\.NET\OnlineSiteYönetimi\OSY\OSY.DB\obj\Debug\net5.0\OSY.DB.csproj.CopyComplete

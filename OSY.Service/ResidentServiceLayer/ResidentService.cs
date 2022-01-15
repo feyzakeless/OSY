@@ -19,7 +19,7 @@ namespace OSY.Service.ResidentServiceLayer
             mapper = _mapper;
         }
 
-        // Daire Sakini Kayıt İslemi
+        // Daire Sakini Kayıt İslemi(Admin)
         public General<ResidentViewModel> Insert(ResidentViewModel newResident)
         {
             var result = new General<ResidentViewModel>() { IsSuccess = false };
@@ -30,6 +30,7 @@ namespace OSY.Service.ResidentServiceLayer
                 {
                     model.Idate = DateTime.Now;
                     model.IsActive = true;
+                    //model.Password = Extensions.Extension.GenerateRandomPassword(8);
                     osy.Resident.Add(model);
                     osy.SaveChanges();
                     result.Entity = mapper.Map<ResidentViewModel>(model);
@@ -45,7 +46,36 @@ namespace OSY.Service.ResidentServiceLayer
             return result;
         }
 
-       
+        // Daire Sakini Kayıt İslemi(Kullanıcı)
+        public General<RegisterResidentViewModel> InsertForUser(RegisterResidentViewModel newResident)
+        {
+            var result = new General<RegisterResidentViewModel>() { IsSuccess = false };
+           
+                
+            using (var osy = new OSYContext())
+            {
+
+                var checkUser = osy.Resident.Any(x => x.Name == newResident.Name && x.Surname == newResident.Surname 
+                && x.Email == newResident.Email && x.IdentityNo == newResident.IdentityNo);
+
+                if (!checkUser)
+                {
+                    result.IsSuccess = false;
+                    result.ExceptionMessage = "Kullanıcı bulunamadı. Lütfen site yönetimiyle iletişime geçiniz.";
+                }
+                else
+                {
+                    result.ExceptionMessage = "Kaydınız tamamlanmıştır. Sisteme giriş şifreniz mailinize iletilmiştir.";
+                    result.IsSuccess = true;
+                }
+
+            }
+
+                return result;
+
+         }
+
+
 
         // Daire Sakini Login
         public General<ResidentViewModel> Login(LoginViewModel loginResident)

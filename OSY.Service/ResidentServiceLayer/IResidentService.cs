@@ -12,6 +12,7 @@ namespace OSY.Service.ResidentServiceLayer
     public interface IResidentService
     {
         public General<ResidentViewModel> Insert(ResidentViewModel newResident);
+        public General<RegisterResidentViewModel> InsertForUser(RegisterResidentViewModel newResident);
         public General<ResidentViewModel> Login(LoginViewModel loginResident);
         public General<ResidentViewModel> GetResidents();
         public General<ResidentViewModel> Update(int id, ResidentViewModel resident);
