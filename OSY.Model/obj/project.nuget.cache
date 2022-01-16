@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "vGvWxy+Mft1YilrGDpcUg+KhPZPKaqMBQ6olpmr0Ays8sO6VgLRAbddxlXpQuVlPDmbZmthFjGRkdrTYKNNx5w==",
+  "dgSpecHash": "xavfV+oMk1tv79y8O9w5zwBFyVRpdhga4a2GwDdhPG/OkCLvDhe4JvfwV2ajNrsk6ifQUbhuPK8iL6CNEUKubw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Feyza\\Desktop\\.NET\\OnlineSiteYönetimi\\OSY\\OSY.Model\\OSY.Model.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Feyza\\.nuget\\packages\\mongodb.bson\\2.14.1\\mongodb.bson.2.14.1.nupkg.sha512",
+    "C:\\Users\\Feyza\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\5.0.0\\system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

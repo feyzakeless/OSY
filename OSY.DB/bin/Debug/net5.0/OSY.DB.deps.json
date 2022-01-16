@@ -11,7 +11,8 @@
           "Microsoft.EntityFrameworkCore": "5.0.4",
           "Microsoft.EntityFrameworkCore.Design": "5.0.4",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.4",
-          "Microsoft.EntityFrameworkCore.Tools": "5.0.4"
+          "Microsoft.EntityFrameworkCore.Tools": "5.0.4",
+          "OSY.Model": "1.0.0"
         },
         "runtime": {
           "OSY.DB.dll": {}
@@ -372,6 +373,17 @@
             "assetType": "runtime",
             "assemblyVersion": "4.0.2.0",
             "fileVersion": "4.700.19.56404"
+          }
+        }
+      },
+      "MongoDB.Bson/2.14.1": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "5.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.1/MongoDB.Bson.dll": {
+            "assemblyVersion": "2.14.1.0",
+            "fileVersion": "2.14.1.0"
           }
         }
       },
@@ -821,6 +833,7 @@
           }
         }
       },
+      "System.Runtime.CompilerServices.Unsafe/5.0.0": {},
       "System.Runtime.Extensions/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "3.1.0",
@@ -1067,6 +1080,14 @@
           "System.Xml.ReaderWriter": "4.3.0",
           "System.Xml.XmlDocument": "4.3.0"
         }
+      },
+      "OSY.Model/1.0.0": {
+        "dependencies": {
+          "MongoDB.Bson": "2.14.1"
+        },
+        "runtime": {
+          "OSY.Model.dll": {}
+        }
       }
     }
   },
@@ -1285,6 +1306,13 @@
       "sha512": "sha512-mtVirZr++rq+XCDITMUdnETD59XoeMxSpLRIII7JRI6Yj0LEDiO1pPn0ktlnIj12Ix8bfvQqQDMMIF9wC98oCA==",
       "path": "microsoft.win32.systemevents/4.7.0",
       "hashPath": "microsoft.win32.systemevents.4.7.0.nupkg.sha512"
+    },
+    "MongoDB.Bson/2.14.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+5LZSrOiQgubSyIfwdofiAiX1KM5m0mpZ55/o9yzJyZr9TviMbVbaxWjaHaQP4pv46fKA2LWSuuQD4SEj2tg0Q==",
+      "path": "mongodb.bson/2.14.1",
+      "hashPath": "mongodb.bson.2.14.1.nupkg.sha512"
     },
     "Newtonsoft.Json/10.0.1": {
       "type": "package",
@@ -1573,6 +1601,13 @@
       "path": "system.runtime.caching/4.7.0",
       "hashPath": "system.runtime.caching.4.7.0.nupkg.sha512"
     },
+    "System.Runtime.CompilerServices.Unsafe/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZD9TMpsmYJLrxbbmdvhwt9YEgG5WntEnZ/d1eH8JBX9LBp+Ju8BSBhUGbZMNVHHomWo2KVImJhTDl2hIgw/6MA==",
+      "path": "system.runtime.compilerservices.unsafe/5.0.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"
+    },
     "System.Runtime.Extensions/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -1754,6 +1789,11 @@
       "sha512": "sha512-MYoTCP7EZ98RrANESW05J5ZwskKDoN0AuZ06ZflnowE50LTpbR5yRg3tHckTVm5j/m47stuGgCrCHWePyHS70Q==",
       "path": "system.xml.xmlserializer/4.3.0",
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
+    },
+    "OSY.Model/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }
