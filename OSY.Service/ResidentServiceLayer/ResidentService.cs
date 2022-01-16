@@ -56,7 +56,7 @@ namespace OSY.Service.ResidentServiceLayer
                     && x.Email == newResident.Email && x.IdentityNo == newResident.IdentityNo);
                 if (userCheck)
                 {
-                    result.ExceptionMessage = "Kayıt işleminiz gerçekleşmiştir. Uygulama şifreniz mailinize iletilmiştir.";
+                    result.SuccessMessage = "Kayıt işleminiz gerçekleşmiştir. Uygulama şifreniz mailinize iletilmiştir.";
                     Console.WriteLine("Sayın "+userInfo.Name+"<br> Online Site Yönetimine Hoşgeldiniz ! <br>"+"Sisteme Giriş Şifreniz : "+userInfo.Password);
                     result.IsSuccess = true;
                 }
