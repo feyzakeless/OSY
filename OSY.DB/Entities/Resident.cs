@@ -21,6 +21,7 @@ namespace OSY.DB.Entities
         public bool IsDelete { get; set; }
         public DateTime Idate { get; set; }
         public DateTime? Udate { get; set; }
+        public bool IsSendWelcomeMail { get; set; }
 
         public virtual Apartment Apart { get; set; }
     }
