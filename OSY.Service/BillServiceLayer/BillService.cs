@@ -57,7 +57,7 @@ namespace OSY.Service.BillServiceLayer
                 {
                     result.List = mapper.Map<List<BillViewModel>>(listedBill);
                     result.IsSuccess = true;
-                    result.ExceptionMessage = "Fatura listeleme işlemi başarılı!";
+                    result.SuccessMessage = "Fatura listeleme işlemi başarılı!";
                 }
                 else
                 {
@@ -82,7 +82,7 @@ namespace OSY.Service.BillServiceLayer
                 {
                     result.IsSuccess = true;
                     result.List = mapper.Map<List<BillViewModel>>(listedPaidBill);
-                    result.ExceptionMessage = "Ödenmiş faturaları listeleme işlemi başarılı!";
+                    result.SuccessMessage = "Ödenmiş faturaları listeleme işlemi başarılı!";
                     result.TotalCount = result.List.Count;
                 }
                 else
@@ -107,7 +107,7 @@ namespace OSY.Service.BillServiceLayer
                 {
                     result.IsSuccess = true;
                     result.List = mapper.Map<List<BillViewModel>>(listedUnPaidBill);
-                    result.ExceptionMessage = "Ödenmemiş faturaları listeleme işlemi başarılı!";
+                    result.SuccessMessage = "Ödenmemiş faturaları listeleme işlemi başarılı!";
                     result.TotalCount = result.List.Count;
                 }
                 else
