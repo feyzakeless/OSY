@@ -32,10 +32,10 @@ namespace OSY.Service.Job
                     var message = new MimeMessage(); //Mailkit objesi
                     message.From.Add(new MailboxAddress("OSY", "osyapp@yandex.com")); //kimden gidecek
                     message.To.Add(new MailboxAddress("User", user.Email)); //kime gidecek
-                    message.Subject = "Hoşgeldin"; //Mailin konusu
+                    message.Subject = "Hoşgeldiniz"; //Mailin konusu
                     message.Body = new TextPart("html") //Mailin body si
                     {
-                        Text = "Sayın " + user.Name + ", Online Site Yönetimine Hoşgeldiniz! <br>" + "Uygulama Şifreniz : " + user.Password
+                        Text = "Sayın " + user.Name + ", Online Site Yönetimi'ne Hoşgeldiniz ! <br>" + "Sisteme Giriş Şifreniz : " + user.Password
                     };
 
                     using (var client = new SmtpClient()) //smptp sağlayıcı
@@ -54,6 +54,5 @@ namespace OSY.Service.Job
             }
 
         }
-
     }
 }
