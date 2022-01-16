@@ -51,7 +51,7 @@ namespace OSY.API.Controllers
 
             return Ok($"Hi {currentUser.Name}, you are an {currentUser.IsAdmin}");
         }
-        
+
         // Daire Sakini Ekleme (Admin)
         [HttpPost("Insert")]
         [Authorize(Roles = "Administor")]
@@ -67,6 +67,7 @@ namespace OSY.API.Controllers
             return residentService.InsertForUser(newResident);
         }
 
+        [Authorize(Roles = "Administor")]
         // Daire Sakini listeleme
         [HttpGet]
         public General<ResidentViewModel> GetResidents()
@@ -74,6 +75,7 @@ namespace OSY.API.Controllers
             return residentService.GetResidents();
         }
 
+        [Authorize(Roles = "Administor")]
         // Daire Sakini Guncelleme
         [HttpPut("{id}")]
         public General<ResidentViewModel> Update(int id, [FromBody] ResidentViewModel resident)
@@ -81,6 +83,7 @@ namespace OSY.API.Controllers
             return residentService.Update(id, resident);
         }
 
+        [Authorize(Roles = "Administor")]
         // Daire Sakini Silme
         [HttpDelete]
         public General<ResidentViewModel> Delete(int id)

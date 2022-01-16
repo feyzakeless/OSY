@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OSY.Model;
 using OSY.Model.ModelApartment;
@@ -8,6 +9,8 @@ namespace OSY.API.Controllers
 {
     [Route("[controller]s")]
     [ApiController]
+
+    [Authorize(Roles = "Administor")]
     public class ApartmentController : Controller
     {
         private readonly IApartmentService apartmentService;

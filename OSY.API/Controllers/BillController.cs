@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OSY.Model;
 using OSY.Model.ModelBill;
@@ -19,8 +20,10 @@ namespace OSY.API.Controllers
             mapper = _mapper;
         }
 
+
         // Fatura Listeleme
         [HttpGet]
+        [Authorize(Roles = "Administor")]
         public General<BillViewModel> GetList()
         {
             return billService.GetList();
@@ -28,6 +31,7 @@ namespace OSY.API.Controllers
 
         // Ödenmiş Fatura Listeleme
         [HttpGet("PaidBills")]
+        [Authorize(Roles = "Administor")]
         public General<BillViewModel> GetPaidBillList()
         {
             return billService.GetPaidBillList();
@@ -35,6 +39,7 @@ namespace OSY.API.Controllers
 
         // Ödenmemiş Fatura Listeleme
         [HttpGet("UnPaidBills")]
+        [Authorize(Roles = "Administor")]
         public General<BillViewModel> GetUnPaidBillList()
         {
             return billService.GetUnPaidBillList();
@@ -42,6 +47,7 @@ namespace OSY.API.Controllers
 
         // Fatura Guncelleme
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administor")]
         public General<BillViewModel> Update([FromBody] BillViewModel bill, int id)
         {
             return billService.Update(bill, id);
@@ -50,6 +56,7 @@ namespace OSY.API.Controllers
 
         // Fatura silme
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administor")]
         public General<BillViewModel> Delete(int id)
         {
             return billService.Delete(id);
@@ -57,6 +64,7 @@ namespace OSY.API.Controllers
 
         // Fatura Atama
         [HttpPost("AssignBills")]
+        [Authorize(Roles = "Administor")]
         public General<BillViewModel> PostBill(decimal totalPrice, AssignBillViewModel newBills)
         {
             return billService.PostBill(totalPrice, newBills);
@@ -64,6 +72,7 @@ namespace OSY.API.Controllers
 
         // Toplu Fatura Odeme
         [HttpPost("PayLumpSum")]
+        [Authorize(Roles = "User")]
         public General<BillViewModel> PayLumpSum(string billType, CreditCardViewModel cardModel)
         {
             return billService.PayLumpSum(billType, cardModel);

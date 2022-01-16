@@ -72,6 +72,8 @@ namespace OSY.API.Controllers
         {
 
             ResidentViewModel currentUser= null;
+
+            //string decodePass = OSY.Service.Extensions.Extension.DecodeBase64(userLogin.Password);
             using (var item = new OSYContext())
             {
                 var user = item.Resident.FirstOrDefault(x => x.Email == userLogin.Email && x.Password == userLogin.Password);
