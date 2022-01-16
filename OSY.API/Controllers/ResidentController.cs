@@ -52,12 +52,19 @@ namespace OSY.API.Controllers
             return Ok($"Hi {currentUser.Name}, you are an {currentUser.IsAdmin}");
         }
         
-        // Daire Sakini Ekleme
-        [HttpPost]
+        // Daire Sakini Ekleme (Admin)
+        [HttpPost("Insert")]
         [Authorize(Roles = "Administor")]
         public General<ResidentViewModel> Insert([FromBody] ResidentViewModel newResident)
         {
             return residentService.Insert(newResident);//CurrentUser ın Id si birden büyükse insert edip devam edicek.
+        }
+
+        // Daire Sakini Ekleme (User)
+        [HttpPost("Insert/User")]
+        public General<RegisterResidentViewModel> InsertForUser([FromBody] RegisterResidentViewModel newResident)
+        {
+            return residentService.InsertForUser(newResident);
         }
 
         // Daire Sakini listeleme
