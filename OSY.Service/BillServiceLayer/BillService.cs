@@ -28,19 +28,9 @@ namespace OSY.Service.BillServiceLayer
                 var billModel = mapper.Map<OSY.DB.Entities.Bill>(newBill);
                 using (var context = new OSYContext())
                 {
-                    //var isChecked = context.Resident.Any(a => a.ApartId == apartmentModel.Id); //Daire Kontrolu
 
-                    /*if (isChecked)
-                    {*/
-                    //apartmentModel.Idate = DateTime.Now;
                     context.Bill.Add(billModel);
                     context.SaveChanges();
-                    /*}
-                    else
-                    {
-                        result.ExceptionMessage = "Ekleme işlemi için yetkiniz bulunmamaktadır.";
-                    }*/
-
 
 
                     result.Entity = mapper.Map<BillViewModel>(billModel);
@@ -67,6 +57,7 @@ namespace OSY.Service.BillServiceLayer
                 {
                     result.List = mapper.Map<List<BillViewModel>>(listedBill);
                     result.IsSuccess = true;
+                    result.ExceptionMessage = "Fatura listeleme işlemi başarılı!";
                 }
                 else
                 {
@@ -79,8 +70,60 @@ namespace OSY.Service.BillServiceLayer
 
         }
 
+        //Ödenmiş Faturaları Listeleme İslemi
+        public General<BillViewModel> GetPaidBillList()
+        {
+            var result = new General<BillViewModel>() { IsSuccess = false };
+            using (var context = new OSYContext())
+            {
+                var listedPaidBill = context.Bill.Where(x => x.IsPaid);
+
+                if (listedPaidBill.Any())
+                {
+                    result.IsSuccess = true;
+                    result.List = mapper.Map<List<BillViewModel>>(listedPaidBill);
+                    result.ExceptionMessage = "Ödenmiş faturaları listeleme işlemi başarılı!";
+                    result.TotalCount = result.List.Count;
+                }
+                else
+                {
+                    result.ExceptionMessage = "Hata Oluştu.";
+                }
+            }
+
+            return result;
+
+        }
+
+        //Ödenmemiş Faturaları Listeleme İslemi
+        public General<BillViewModel> GetUnPaidBillList()
+        {
+            var result = new General<BillViewModel>() { IsSuccess = false };
+            using (var context = new OSYContext())
+            {
+                var listedUnPaidBill = context.Bill.Where(x => !x.IsPaid);
+
+                if (listedUnPaidBill.Any())
+                {
+                    result.IsSuccess = true;
+                    result.List = mapper.Map<List<BillViewModel>>(listedUnPaidBill);
+                    result.ExceptionMessage = "Ödenmemiş faturaları listeleme işlemi başarılı!";
+                    result.TotalCount = result.List.Count;
+                }
+                else
+                {
+                    result.ExceptionMessage = "Hata Oluştu.";
+                }
+            }
+
+            return result;
+
+        }
+
+
+
         // Fatura Guncelleme İslemi
-        public General<BillViewModel> Update(BillViewModel medicine, int id)
+        public General<BillViewModel> Update(BillViewModel bill, int id)
         {
 
             var result = new General<BillViewModel>() { IsSuccess = false };
@@ -90,11 +133,10 @@ namespace OSY.Service.BillServiceLayer
                
                 if (updateBill is not null)
                 {
-                    updateBill.BillType = medicine.BillType;
-                    updateBill.Paid = medicine.Paid;
-                    updateBill.UnPaid = medicine.UnPaid;
-                    updateBill.TotalDept = medicine.TotalDept;
-                    updateBill.Iapartment = medicine.Iapartment;
+                    updateBill.BillType = bill.BillType;
+                    updateBill.IsPaid = bill.IsPaid;
+                    updateBill.Price = bill.Price;
+                    updateBill.Iapartment = bill.Iapartment;
 
                     context.SaveChanges();
 
