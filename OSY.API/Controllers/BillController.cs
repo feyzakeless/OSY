@@ -34,6 +34,20 @@ namespace OSY.API.Controllers
             return billService.GetList();
         }
 
+        // Ödenmiş Fatura Listeleme
+        [HttpGet("PaidBills")]
+        public General<BillViewModel> GetPaidBillList()
+        {
+            return billService.GetPaidBillList();
+        }
+
+        // Ödenmemiş Fatura Listeleme
+        [HttpGet("UnPaidBills")]
+        public General<BillViewModel> GetUnPaidBillList()
+        {
+            return billService.GetUnPaidBillList();
+        }
+
         // Fatura Guncelleme
         [HttpPut("{id}")]
         public General<BillViewModel> Update([FromBody] BillViewModel bill, int id)
