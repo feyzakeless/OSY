@@ -18,15 +18,6 @@ namespace OSY.API.Controllers
             mapper = _mapper;
         }
 
-        // Fatura Ekleme
-        [HttpPost]
-        public General<BillViewModel> Insert([FromBody] BillViewModel newBill)
-        {
-            General<BillViewModel> response = new();
-            response = billService.Insert(newBill);
-            return response;
-        }
-
         // Fatura Listeleme
         [HttpGet]
         public General<BillViewModel> GetList()
