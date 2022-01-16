@@ -52,9 +52,12 @@ namespace OSY.Service.ResidentServiceLayer
             {
                 var userCheck = osy.Resident.Any(x => x.Name == newResident.Name &&  x.Surname == newResident.Surname
                     && x.Email == newResident.Email && x.IdentityNo == newResident.IdentityNo);
+                var userInfo = osy.Resident.FirstOrDefault(x => x.Name == newResident.Name && x.Surname == newResident.Surname
+                    && x.Email == newResident.Email && x.IdentityNo == newResident.IdentityNo);
                 if (userCheck)
                 {
                     result.ExceptionMessage = "Kayıt işleminiz gerçekleşmiştir. Uygulama şifreniz mailinize iletilmiştir.";
+                    Console.WriteLine("Sayın "+userInfo.Name+"<br> Online Site Yönetimine Hoşgeldiniz ! <br>"+"Sisteme Giriş Şifreniz : "+userInfo.Password);
                     result.IsSuccess = true;
                 }
                 else
