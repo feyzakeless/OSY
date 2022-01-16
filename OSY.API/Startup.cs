@@ -109,10 +109,10 @@ namespace OSY.API
                 endpoints.MapControllers();
             });
 
-            /*backgroundJobClient.Enqueue(() => Console.WriteLine("Hello Hangfire Job!"));
+            backgroundJobClient.Enqueue(() => Console.WriteLine("Hello Hangfire Job!"));
             recurringJobManager.AddOrUpdate("EmailOperation",
                 () => serviceProvider.GetService<IEmailOperations>().sendWelcomeEmail(),
-                "* * * * * "); //hergün sendEmail methodunu çalýþtýrýyoruz*/
+                "* * * * * "); //her dk sendEmail methodunu çalýþtýrýyoruz*/
         }
     }
 }
