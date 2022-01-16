@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,11 @@ namespace OSY.Model.ModelCreditCard
 {
     public class CreditCardViewModel
     {
-        public int BillId { get; set; }
+        [BsonId]
+        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+
+        public string Id { get; set; }
+        public int ApartmentId { get; set; }
         public long CreditCardNumber { get; set; }
         public int CVV{ get; set; }
     }
