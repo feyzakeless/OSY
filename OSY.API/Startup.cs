@@ -10,8 +10,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OSY.API.Infrastucture;
+using OSY.Service;
 using OSY.Service.ApartmentServiceLayer;
 using OSY.Service.BillServiceLayer;
+using OSY.Service.ClientServiceLayer;
 using OSY.Service.HousingServiceLayer;
 using OSY.Service.Job;
 using OSY.Service.ResidentServiceLayer;
@@ -32,6 +34,10 @@ namespace OSY.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // MongoDB Configure
+            services.Configure<PaymentDBConfig>(Configuration);
+            services.AddSingleton<IDbClient, DbClient>();
+
             //Setup Token
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
