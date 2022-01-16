@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using OSY.DB.Entities;
 using OSY.DB.Entities.DataContext;
 using OSY.Model;
 using OSY.Model.ModelBill;
+using OSY.Service.ApartmentServiceLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,36 +15,11 @@ namespace OSY.Service.BillServiceLayer
     public class BillService : IBillService
     {
         private readonly IMapper mapper;
-        public BillService(IMapper _mapper)
+        private readonly IApartmentService apartmentService;
+        public BillService(IMapper _mapper, IApartmentService _apartmentService)
         {
             mapper = _mapper;
-        }
-
-        // Fatura Ekleme İslemi
-        public General<BillViewModel> Insert(BillViewModel newBill)
-        {
-            var result = new General<BillViewModel>() { IsSuccess = false };
-
-            try
-            {
-                var billModel = mapper.Map<OSY.DB.Entities.Bill>(newBill);
-                using (var context = new OSYContext())
-                {
-
-                    context.Bill.Add(billModel);
-                    context.SaveChanges();
-
-
-                    result.Entity = mapper.Map<BillViewModel>(billModel);
-                    result.IsSuccess = true;
-                }
-            }
-            catch (System.Exception)
-            {
-                result.ExceptionMessage = "Daire ekleme gerçekleşmedi.";
-            }
-
-            return result;
+            apartmentService = _apartmentService;   
         }
 
         // Fatura Listeleme İslemi
@@ -176,6 +153,52 @@ namespace OSY.Service.BillServiceLayer
                 }
             }
             return result;
+        }
+
+        public General<BillViewModel> PostBill(decimal totalPrice, AssignBillViewModel newBills)
+        {
+           
+            var result = new General<BillViewModel>();
+            var billModel = mapper.Map<OSY.DB.Entities.Bill>(newBills);
+            using (var context = new OSYContext())
+            {
+                var apartmentCount = apartmentService.GetList().TotalCount;
+
+                var pricePerApartment = Extensions.Extension.DivideTotalBill( apartmentCount , totalPrice);
+
+                if (pricePerApartment != 0 && apartmentCount > 0)
+                {
+                    var apartmentList = context.Apartment.Where(x => x.IsFull).OrderBy(x => x.Id);
+
+                    foreach (var item in apartmentList)
+                    {
+                        var bill = new Bill
+                        {
+                            Iapartment = item.Id,
+                            Price = pricePerApartment,
+                            BillType = newBills.BillType,
+                            IsPaid = newBills.IsPaid,
+                            Idate = newBills.Idate
+                        };
+
+                        context.Bill.Add(bill);
+                    }
+
+                    context.SaveChanges();
+
+                    result.SuccessMessage = newBills.BillType + " faturası oluşturma başarılı!";
+                    result.IsSuccess = true;
+                }
+                else
+                {
+                    result.ExceptionMessage = "Hata oluştu !";
+                }
+               
+            }
+            
+
+            return result;
+
         }
 
     }
