@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OSY.Model;
 using OSY.Model.ModelBill;
+using OSY.Model.ModelCreditCard;
 using OSY.Service.BillServiceLayer;
 
 namespace OSY.API.Controllers
@@ -59,6 +60,13 @@ namespace OSY.API.Controllers
         public General<BillViewModel> PostBill(decimal totalPrice, AssignBillViewModel newBills)
         {
             return billService.PostBill(totalPrice, newBills);
+        }
+
+        // Toplu Fatura Odeme
+        [HttpPost("PayLumpSum")]
+        public General<BillViewModel> PayLumpSum(string billType, CreditCardViewModel cardModel)
+        {
+            return billService.PayLumpSum(billType, cardModel);
         }
     }
 }
