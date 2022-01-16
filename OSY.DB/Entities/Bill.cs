@@ -9,9 +9,8 @@ namespace OSY.DB.Entities
     {
         public int Id { get; set; }
         public string BillType { get; set; }
-        public decimal Paid { get; set; }
-        public decimal UnPaid { get; set; }
-        public decimal TotalDept { get; set; }
+        public bool IsPaid { get; set; }
+        public decimal Price { get; set; }
         public int Iapartment { get; set; }
 
         public virtual Apartment IapartmentNavigation { get; set; }
