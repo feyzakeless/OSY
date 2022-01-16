@@ -30,7 +30,7 @@ namespace OSY.Service.Job
                 foreach (var user in userList)
                 {
                     var message = new MimeMessage(); //Mailkit objesi
-                    message.From.Add(new MailboxAddress("OSY", "osyapp@yandex.com")); //kimden gidecek
+                    message.From.Add(new MailboxAddress("OSY", "talhaekrem0@yandex.com")); //kimden gidecek
                     message.To.Add(new MailboxAddress("User", user.Email)); //kime gidecek
                     message.Subject = "Hoşgeldiniz"; //Mailin konusu
                     message.Body = new TextPart("html") //Mailin body si
@@ -40,8 +40,9 @@ namespace OSY.Service.Job
 
                     using (var client = new SmtpClient()) //smptp sağlayıcı
                     {
+                        //client.Authenticate("osyapp@yandex.com", "evucujfdsrryzloe");
                         client.Connect("smtp.yandex.com", 465, true); //port a bağlanıyoruz
-                        client.Authenticate("osyapp@yandex.com", "evucujfdsrryzloe");
+                        client.Authenticate("talhaekrem0@yandex.com", "njfqmehnzooebuum");
                         client.Send(message); //mesajı gönderiyoruz
                         client.Disconnect(true);
                     }
