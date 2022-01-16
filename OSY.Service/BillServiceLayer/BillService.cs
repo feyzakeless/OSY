@@ -19,7 +19,7 @@ namespace OSY.Service.BillServiceLayer
         public BillService(IMapper _mapper, IApartmentService _apartmentService)
         {
             mapper = _mapper;
-            apartmentService = _apartmentService;   
+            apartmentService = _apartmentService;
         }
 
         // Fatura Listeleme İslemi
@@ -107,7 +107,7 @@ namespace OSY.Service.BillServiceLayer
             using (var context = new OSYContext())
             {
                 var updateBill = context.Bill.SingleOrDefault(i => i.Id == id);
-               
+
                 if (updateBill is not null)
                 {
                     updateBill.BillType = bill.BillType;
@@ -155,53 +155,151 @@ namespace OSY.Service.BillServiceLayer
             return result;
         }
 
+        // Toplu Fatura/Aidat Atama İslemi
         public General<BillViewModel> PostBill(decimal totalPrice, AssignBillViewModel newBills)
         {
-           
+
             var result = new General<BillViewModel>();
             var billModel = mapper.Map<OSY.DB.Entities.Bill>(newBills);
+
+            // Toplam daire sayısı
+            var apartmentCount = apartmentService.GetList().TotalCount;
+
             using (var context = new OSYContext())
             {
-                var apartmentCount = apartmentService.GetList().TotalCount;
-
-                var pricePerApartment = Extensions.Extension.DivideTotalBill( apartmentCount , totalPrice);
-
-                if (pricePerApartment != 0 && apartmentCount > 0)
+                if (newBills.BillType.ToLower() != "dues")
                 {
-                    var apartmentList = context.Apartment.Where(x => x.IsFull).OrderBy(x => x.Id);
+                    // Daire basına düsen fatura ücreti
+                    var pricePerApartment = Extensions.Extension.DivideTotalBill(apartmentCount, totalPrice);
+
+                    if (pricePerApartment > 0 && apartmentCount > 0)
+                    {
+                        // Dolu olan dairelerin listesi
+                        var apartmentList = context.Apartment.Where(x => x.IsFull).OrderBy(x => x.Id);
+
+                        //Her bir daireye yeni fatura olusturma
+                        foreach (var item in apartmentList)
+                        {
+                            var bill = new Bill
+                            {
+                                Iapartment = item.Id,
+                                Price = pricePerApartment,
+                                BillType = newBills.BillType,
+                                IsPaid = newBills.IsPaid,
+                                Idate = newBills.Idate
+                            };
+
+                            context.Bill.Add(bill);
+                        }
+
+                        context.SaveChanges();
+
+                        result.SuccessMessage = newBills.BillType + " faturası oluşturma başarılı!";
+                        result.IsSuccess = true;
+                    }
+                    else
+                    {
+                        result.ExceptionMessage = "Hata oluştu !";
+                    }
+                }
+                else 
+                {
+                    // Aidatları faturalandırma
+
+                    // Tüm Dairelerin Listesi
+                    var apartmentList = apartmentService.GetList().List;
+
+                    // Aylık olarak tüm sitenin ödeyeceği toplam aidat tutarı
+                    var monthlyTotalPrice = totalPrice / 12;
+
+                    // Daire basına düsen aidat ücreti
+                    var pricePerApartment = Extensions.Extension.DivideTotalBill(apartmentCount, monthlyTotalPrice);
+
+                    decimal monthlyPrice = 0;
+
+                    /*int count1 = 0;
+                    int count2 = 0;
+                    int count3 = 0;
 
                     foreach (var item in apartmentList)
                     {
-                        var bill = new Bill
+                        if (item.ApartmentType == "2+1")
                         {
-                            Iapartment = item.Id,
-                            Price = pricePerApartment,
-                            BillType = newBills.BillType,
-                            IsPaid = newBills.IsPaid,
-                            Idate = newBills.Idate
-                        };
-
-                        context.Bill.Add(bill);
+                            count1++;
+                        }
+                        else if (item.ApartmentType == "3+1")
+                        {
+                            count2++;
+                        }
+                        else if (item.ApartmentType == "4+1")
+                        {
+                            count3++;
+                        }
                     }
 
-                    context.SaveChanges();
+                    var lcm = Extensions.Extension.LCM(count1, Extensions.Extension.LCM(count2, count3));*/
 
-                    result.SuccessMessage = newBills.BillType + " faturası oluşturma başarılı!";
-                    result.IsSuccess = true;
+                    if (pricePerApartment > 0)
+                    {
+
+                        foreach (var item in apartmentList)
+                        {
+
+                            if (item.ApartmentType == "2+1")
+                            {
+                                monthlyPrice = pricePerApartment - 100;
+                            }
+
+                            else if (item.ApartmentType == "3+1")
+                            {
+                                monthlyPrice = pricePerApartment;
+                            }
+
+                            else if (item.ApartmentType == "4+1")
+                            {
+                                monthlyPrice = pricePerApartment + 100;
+                            }
+
+
+                            if (monthlyPrice > 0)
+                            {
+                                var bill = new Bill
+                                {
+                                    Iapartment = item.Id,
+                                    Price = monthlyPrice,
+                                    BillType = newBills.BillType,
+                                    IsPaid = newBills.IsPaid,
+                                    Idate = newBills.Idate
+                                };
+
+                                context.Bill.Add(bill);
+                            }
+                            else
+                            {
+                                result.ExceptionMessage = "Lütfen girdiğiniz tutarı kontrol ediniz !";
+                                break;
+                            }
+
+                        }
+                        context.SaveChanges();
+
+                        result.SuccessMessage = "Dues(aidat) faturası oluşturma başarılı!";
+                        result.IsSuccess = true;
+                    }
+                    else
+                    {
+                        result.ExceptionMessage = "Lütfen girdiğiniz tutarı kontrol ediniz !";
+                        result.IsSuccess = false;
+                    }
+                    
                 }
-                else
-                {
-                    result.ExceptionMessage = "Hata oluştu !";
-                }
-               
+
+                return result;
+
             }
-            
-
-            return result;
 
         }
 
+
     }
-
-
 }
