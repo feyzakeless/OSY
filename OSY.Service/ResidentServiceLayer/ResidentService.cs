@@ -28,6 +28,7 @@ namespace OSY.Service.ResidentServiceLayer
                 {
                     model.Idate = DateTime.Now;
                     model.IsActive = true;
+                    model.Password = Extensions.Extension.EncodeBase64(newResident.Password);
                     osy.Resident.Add(model);
                     osy.SaveChanges();
                     result.Entity = mapper.Map<ResidentViewModel>(model);
