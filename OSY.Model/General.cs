@@ -11,5 +11,6 @@ namespace OSY.Model
         public int SumPageNumber { get; set; }
         public List<string> ValidationErrorList { get; set; }
         public string ExceptionMessage { get; set; }
+        public string SuccessMessage { get; set; }
     }
 }
