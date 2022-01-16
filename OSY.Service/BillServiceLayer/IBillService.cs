@@ -12,6 +12,8 @@ namespace OSY.Service.BillServiceLayer
     {
         public General<BillViewModel> Insert(BillViewModel newBill);
         public General<BillViewModel> GetList();
+        public General<BillViewModel> GetPaidBillList();
+        public General<BillViewModel> GetUnPaidBillList();
         public General<BillViewModel> Update(BillViewModel medicine, int id);
         public General<BillViewModel> Delete(int id);
     }
