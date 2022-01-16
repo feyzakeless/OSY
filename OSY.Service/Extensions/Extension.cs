@@ -40,5 +40,20 @@ namespace OSY.Service.Extensions
             }
             return buildPass.ToString();
         }
+
+        public static int GCD(int a, int b)
+        {
+            if (a == 0)
+                return b;
+            return GCD(b % a, a);
+        }
+
+        // method to return
+        // LCM of two numbers
+        public static int LCM(int a, int b)
+        {
+            return (a / GCD(a, b)) * b;
+        }
+
     }
 }
