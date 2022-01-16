@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using MongoDB.Driver;
 using OSY.DB.Entities;
 using OSY.DB.Entities.DataContext;
 using OSY.Model;
 using OSY.Model.ModelBill;
+using OSY.Model.ModelCreditCard;
 using OSY.Service.ApartmentServiceLayer;
+using OSY.Service.ClientServiceLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +19,12 @@ namespace OSY.Service.BillServiceLayer
     {
         private readonly IMapper mapper;
         private readonly IApartmentService apartmentService;
-        public BillService(IMapper _mapper, IApartmentService _apartmentService)
+        private readonly IMongoCollection<CreditCardViewModel> _creditCards;
+        public BillService(IMapper _mapper, IApartmentService _apartmentService, IDbClient dbClient)
         {
             mapper = _mapper;
             apartmentService = _apartmentService;
+            _creditCards = dbClient.GetCardsCollection();
         }
 
         // Fatura Listeleme İslemi
@@ -277,7 +282,7 @@ namespace OSY.Service.BillServiceLayer
                             else
                             {
                                 result.ExceptionMessage = "Lütfen girdiğiniz tutarı kontrol ediniz !";
-                                break;
+                                return result;
                             }
 
                         }
@@ -298,6 +303,50 @@ namespace OSY.Service.BillServiceLayer
 
             }
 
+        }
+
+        // MongoDB ye Cart Bilgisi Ekleme
+        public CreditCardViewModel AddCard(CreditCardViewModel card)
+        {
+            _creditCards.InsertOne(card);
+            return card;
+        }
+
+        // Toplu Ödeme İslemi
+        public General<BillViewModel> PayLumpSum(string billType, CreditCardViewModel cardModel)
+        {
+            var result = new General<BillViewModel>();
+
+            using (var context = new OSYContext())
+            {
+                var billList = context.Bill.Where(x => x.Iapartment == cardModel.ApartmentId && x.BillType == billType && !x.IsPaid);
+
+                decimal totalUnPaid = 0;
+
+                foreach (var item in billList)
+                {
+                    totalUnPaid += item.Price;
+
+
+                    if (totalUnPaid > 0)
+                    {
+                        AddCard(cardModel);
+                        item.IsPaid = true;
+                        result.SuccessMessage = "Toplu ödeme başarılı!";
+                        result.IsSuccess = true;
+                    }
+                    else
+                    {
+                        result.ExceptionMessage = "Ödeme başarısız, lütfen bilgileri kontrol edin!";
+                    }
+
+                }
+
+                context.SaveChanges();
+
+            }
+
+            return result;
         }
 
 
