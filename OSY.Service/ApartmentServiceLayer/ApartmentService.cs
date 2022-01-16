@@ -55,6 +55,8 @@ namespace OSY.Service.ApartmentServiceLayer
                 if (listedApartment.Any())
                 {
                     result.List = mapper.Map<List<ApartmentViewModel>>(listedApartment);
+                    result.TotalCount = result.List.Count;
+                    result.SuccessMessage = "Daire listeleme işlemi başarılı!";
                     result.IsSuccess = true;
                 }
                 else
