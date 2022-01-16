@@ -2,6 +2,7 @@
 using OSY.Model.ModelApartment;
 using OSY.Model.ModelBill;
 using OSY.Model.ModelHousing;
+using OSY.Model.ModelLogin;
 using OSY.Model.ModelResident;
 
 namespace OSY.API.Infrastucture
@@ -14,6 +15,12 @@ namespace OSY.API.Infrastucture
             CreateMap<ResidentViewModel, OSY.DB.Entities.Resident>();
             CreateMap<OSY.DB.Entities.Resident, ResidentViewModel>();
 
+            CreateMap<LoginViewModel, OSY.DB.Entities.Resident>();
+            CreateMap<OSY.DB.Entities.Resident, LoginViewModel>();
+
+            CreateMap<RegisterResidentViewModel, OSY.DB.Entities.Resident>();
+            CreateMap<OSY.DB.Entities.Resident, RegisterResidentViewModel>();
+
             //Blok Mapping
             CreateMap<HousingViewModel, OSY.DB.Entities.Housing>();
             CreateMap<OSY.DB.Entities.Housing, HousingViewModel>();
@@ -25,6 +32,9 @@ namespace OSY.API.Infrastucture
             //Fatura Mapping
             CreateMap<BillViewModel, OSY.DB.Entities.Bill>();
             CreateMap<OSY.DB.Entities.Bill, BillViewModel>();
+
+            CreateMap<AssignBillViewModel, OSY.DB.Entities.Bill>();
+            CreateMap<OSY.DB.Entities.Bill, AssignBillViewModel>();
         }
     }
 }

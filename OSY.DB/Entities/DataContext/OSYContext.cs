@@ -57,11 +57,12 @@ namespace OSY.DB.Entities.DataContext
 
                 entity.Property(e => e.Iapartment).HasColumnName("IApartment");
 
-                entity.Property(e => e.Paid).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Idate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("IDate")
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.TotalDept).HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.UnPaid).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.IapartmentNavigation)
                     .WithMany(p => p.Bill)

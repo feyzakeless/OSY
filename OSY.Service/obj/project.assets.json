@@ -7994,7 +7994,6 @@
     "net5.0": [
       "AutoMapper >= 11.0.0",
       "MailKit >= 1.18.0",
-      "MimeKit >= 1.18.0",
       "OSY.DB >= 1.0.0",
       "OSY.Model >= 1.0.0"
     ]
@@ -8057,10 +8056,6 @@
             "version": "[11.0.0, )"
           },
           "MailKit": {
-            "target": "Package",
-            "version": "[1.18.0, )"
-          },
-          "MimeKit": {
             "target": "Package",
             "version": "[1.18.0, )"
           }

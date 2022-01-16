@@ -206,10 +206,6 @@
             "MailKit": {
               "target": "Package",
               "version": "[1.18.0, )"
-            },
-            "MimeKit": {
-              "target": "Package",
-              "version": "[1.18.0, )"
             }
           },
           "imports": [

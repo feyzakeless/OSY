@@ -62,5 +62,12 @@ namespace OSY.API.Controllers
         {
             return billService.Delete(id);
         }
+
+        // Fatura Atama
+        [HttpPost("AssignBills")]
+        public General<BillViewModel> PostBill(decimal totalPrice, AssignBillViewModel newBills)
+        {
+            return billService.PostBill(totalPrice, newBills);
+        }
     }
 }
