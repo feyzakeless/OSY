@@ -26,11 +26,28 @@ namespace OSY.Service.ResidentServiceLayer
                 var model = mapper.Map<OSY.DB.Entities.Resident>(newResident);
                 using (var osy = new OSYContext())
                 {
+                    var checkList = osy.Apartment.Where(x => x.IsFull);
+                    foreach (var check in checkList)
+                        if(check.Id == newResident.ApartId)
+                        {
+                            result.IsSuccess = false;
+                            result.ExceptionMessage = "Eklemek istediğiniz daire doludur!";
+                            return result;
+                        }
+
+
                     model.Idate = DateTime.Now;
                     model.IsActive = true;
                     model.Password = Extensions.Extension.EncodeBase64(newResident.Password);
                     osy.Resident.Add(model);
+
+                    var emptyApartmentList = osy.Apartment.Where(x => !x.IsFull);
+                    foreach(var empty in emptyApartmentList)
+                        if(empty.Id == model.ApartId)
+                            empty.IsFull = true;
+
                     osy.SaveChanges();
+
                     result.Entity = mapper.Map<ResidentViewModel>(model);
                     result.IsSuccess = true;
                 }
