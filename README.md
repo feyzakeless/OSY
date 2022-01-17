@@ -8,7 +8,12 @@
 	Ve bunun bilgisi daire sakinine verilir. Artýk kullanýcý maili ve þifresiyle sisteme giriþ yapabilir.
   * Mail gönderimi; veritabanýnda daire sakini tablosunda hoþgeldiniz maili bilgisine bakýlarak her dk kontrol edilip gönderilmeyen maillere hangfire ile saðlanýr.
 	(Mail gönderim iþlemim, yandexte açtýðým hesabýmýn yetki yetersizliðinden kaynaklý gerçekleþmedi. Eðitimdeki baþka bir arkadaþýmýn ayný þekilde oluþturduðu mail hesabý
-	ile saðlandý)
+	ile saðlandý, örnek görsel aþaðýya eklendi)
+
+	<br>
+	<div align="center"><img src="OSY.Service/Images/mail.PNG" alt="mail-image"></div>
+	<br>
+
   * JWT token yapýsý ile authorization saðlanmýþtýr.
   * Yönetici, site yönetimine gelen faturayý, elektrik, su ve doðalgaz olarak topluca daire yansýtabilir. Bunun yapýsýný ise örneklendirerek açýklayacak olursam; Mesela aylýk 
 	3000 TL elektrik faturasý geldi siteye. Toplam daire sayýsý da 30 adet. Gelen toplam tutarý toplam daire sayýsýna bölünerek daire baþýna düþen elektrik faturasý 100 TL olarak
