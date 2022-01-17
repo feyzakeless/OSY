@@ -177,13 +177,20 @@ namespace OSY.Service.ResidentServiceLayer
             using (var context = new OSYContext())
             {
                 var resident = context.Resident.SingleOrDefault(i => i.Id == id);
+                var checkList = context.Apartment.Where(x => x.IsFull);
 
                 if (resident is not null)
                 {
+                    
                     context.Resident.Remove(resident); 
                     //Kullanıcıyı tamamamen silmemek için IDelete columnu true yapıldı.
                     //resident.IsDelete = true;
                     //resident.IsActive = false;
+
+                    foreach (var check in checkList)
+                        if(check.Id == resident.ApartId)
+                            check.IsFull = false;
+
                     context.SaveChanges();
 
                     result.Entity = mapper.Map<ResidentViewModel>(resident);
