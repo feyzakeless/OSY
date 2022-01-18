@@ -83,7 +83,7 @@ namespace OSY.API.Controllers
                     return null;
                 }
 
-                currentUser = new ResidentViewModel { Email = user.Email, Password = user.Password, Name = user.Name, 
+                currentUser = new ResidentViewModel { Id = user.Id, Email = user.Email, Password = user.Password, Name = user.Name, 
                     Surname = user.Surname, IsAdmin = user.IsAdmin };
                 return currentUser;
             }
