@@ -55,7 +55,7 @@ namespace OSY.API.Controllers
         // Daire Sakini Ekleme (Admin)
         [HttpPost("Insert")]
         [Authorize(Roles = "Administor")]
-        public General<ResidentViewModel> Insert([FromBody] ResidentViewModel newResident)
+        public General<ResidentViewModel> Insert([FromBody] RegisterForAdminResidentViewModel newResident)
         {
             return residentService.Insert(newResident);//CurrentUser ın Id si birden büyükse insert edip devam edicek.
         }
