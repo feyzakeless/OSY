@@ -172,6 +172,14 @@ namespace OSY.Service.BillServiceLayer
 
             using (var context = new OSYContext())
             {
+                var checkDate = context.Bill.Where(x => x.Idate == newBills.Idate && x.BillType == newBills.BillType);
+                if (checkDate.Any())
+                {
+                    result.ExceptionMessage = "Girilen fatura türüne ve tarihe ait faturalandırma mevcuttur. Lütfen doğru tarih veya doğru fatura türü giriniz.";
+                    return result;
+                }
+
+
                 if (newBills.BillType.ToLower() != "dues")
                 {
                     // Daire basına düsen fatura ücreti
@@ -207,7 +215,7 @@ namespace OSY.Service.BillServiceLayer
                         result.ExceptionMessage = "Hata oluştu !";
                     }
                 }
-                else 
+                else
                 {
                     // Aidatları faturalandırma
 
@@ -296,7 +304,7 @@ namespace OSY.Service.BillServiceLayer
                         result.ExceptionMessage = "Lütfen girdiğiniz tutarı kontrol ediniz !";
                         result.IsSuccess = false;
                     }
-                    
+
                 }
 
                 return result;
