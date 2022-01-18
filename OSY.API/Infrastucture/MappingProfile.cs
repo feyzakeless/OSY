@@ -21,6 +21,9 @@ namespace OSY.API.Infrastucture
             CreateMap<RegisterResidentViewModel, OSY.DB.Entities.Resident>();
             CreateMap<OSY.DB.Entities.Resident, RegisterResidentViewModel>();
 
+            CreateMap<RegisterForAdminResidentViewModel, OSY.DB.Entities.Resident>();
+            CreateMap<OSY.DB.Entities.Resident, RegisterForAdminResidentViewModel>();
+
             //Blok Mapping
             CreateMap<HousingViewModel, OSY.DB.Entities.Housing>();
             CreateMap<OSY.DB.Entities.Housing, HousingViewModel>();
