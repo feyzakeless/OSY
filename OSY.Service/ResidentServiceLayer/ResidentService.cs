@@ -18,7 +18,7 @@ namespace OSY.Service.ResidentServiceLayer
         }
 
         // Daire Sakini Kayıt İslemi (Admin)
-        public General<ResidentViewModel> Insert(ResidentViewModel newResident)
+        public General<ResidentViewModel> Insert(RegisterForAdminResidentViewModel newResident)
         {
             var result = new General<ResidentViewModel>() { IsSuccess = false };
             try
@@ -26,25 +26,20 @@ namespace OSY.Service.ResidentServiceLayer
                 var model = mapper.Map<OSY.DB.Entities.Resident>(newResident);
                 using (var osy = new OSYContext())
                 {
-                    var checkList = osy.Apartment.Where(x => x.IsFull);
-                    foreach (var check in checkList)
-                        if(check.Id == newResident.ApartId)
-                        {
-                            result.IsSuccess = false;
-                            result.ExceptionMessage = "Eklemek istediğiniz daire doludur!";
-                            return result;
-                        }
+                    var apartmentCheck = osy.Apartment.FirstOrDefault(x => x.Id == model.ApartId);
+                    if(apartmentCheck.IsFull)
+                    {
+                        result.IsSuccess = false;
+                        result.ExceptionMessage = "Eklemek istediğiniz daire doludur!";
+                        return result;
+                    }
 
 
                     model.Idate = DateTime.Now;
                     model.IsActive = true;
-                    model.Password = Extensions.Extension.EncodeBase64(newResident.Password);
+                    model.Password = Extensions.Extension.GenerateRandomPassword(8);
                     osy.Resident.Add(model);
-
-                    var emptyApartmentList = osy.Apartment.Where(x => !x.IsFull);
-                    foreach(var empty in emptyApartmentList)
-                        if(empty.Id == model.ApartId)
-                            empty.IsFull = true;
+                    apartmentCheck.IsFull = true;
 
                     osy.SaveChanges();
 
