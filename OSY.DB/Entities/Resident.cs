@@ -7,6 +7,12 @@ namespace OSY.DB.Entities
 {
     public partial class Resident
     {
+        public Resident()
+        {
+            MessageRecevier = new HashSet<Message>();
+            MessageSender = new HashSet<Message>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -24,5 +30,7 @@ namespace OSY.DB.Entities
         public bool IsSendWelcomeMail { get; set; }
 
         public virtual Apartment Apart { get; set; }
+        public virtual ICollection<Message> MessageRecevier { get; set; }
+        public virtual ICollection<Message> MessageSender { get; set; }
     }
 }
