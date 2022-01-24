@@ -62,18 +62,35 @@ namespace OSY.API.Controllers
             return billService.Delete(id);
         }
 
-        // Fatura Atama
-        [HttpPost("AssignBills")]
+        // Tek Fatura Atama
+        [HttpPost("PostBill")]
         [Authorize(Roles = "Administor")]
-        public General<BillViewModel> PostBill(decimal totalPrice, AssignBillViewModel newBills)
+        public General<BillViewModel> PostBill(int id,  decimal price, AssignBillViewModel newBills)
         {
-            return billService.PostBill(totalPrice, newBills);
+            return billService.PostBill(id, price, newBills);
         }
+
+        // Toplu Fatura Atama
+        [HttpPost("AssignTotalBills")]
+        [Authorize(Roles = "Administor")]
+        public General<BillViewModel> PostTotalBill(decimal totalPrice, AssignBillViewModel newBills)
+        {
+            return billService.PostTotalBill(totalPrice, newBills);
+        }
+
+        // Tek Fatura Odeme
+        [HttpPost("PayBill")]
+        [Authorize(Roles = "User")]
+        public General<BillViewModel> PayBill(string billType, InsertCreditCardModel cardModel)
+        {
+            return billService.PayBill(billType, cardModel);
+        }
+
 
         // Toplu Fatura Odeme
         [HttpPost("PayLumpSum")]
         [Authorize(Roles = "User")]
-        public General<BillViewModel> PayLumpSum(string billType, CreditCardViewModel cardModel)
+        public General<BillViewModel> PayLumpSum(string billType, InsertCreditCardModel cardModel)
         {
             return billService.PayLumpSum(billType, cardModel);
         }

@@ -14,8 +14,10 @@ using OSY.Service;
 using OSY.Service.ApartmentServiceLayer;
 using OSY.Service.BillServiceLayer;
 using OSY.Service.ClientServiceLayer;
+using OSY.Service.CreditCardServiceLayer;
 using OSY.Service.HousingServiceLayer;
 using OSY.Service.Job;
+using OSY.Service.MessageServiceLayer;
 using OSY.Service.ResidentServiceLayer;
 using System;
 using System.Text;
@@ -54,6 +56,8 @@ namespace OSY.API
                 });
 
             services.AddMvc();
+            services.AddCors();
+            services.AddScoped<JwtService>();
 
             //Hangfire kuruldu
             services.AddHangfire(config =>
@@ -81,6 +85,8 @@ namespace OSY.API
             services.AddTransient<IApartmentService, ApartmentService>();
             services.AddTransient<IBillService, BillService>();
             services.AddTransient<IEmailOperations, EmailOperations>();
+            services.AddTransient<ICreditCardService, CreditCardService>();
+            services.AddTransient<IMessageService, MessageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,6 +107,14 @@ namespace OSY.API
             app.UseRouting();
 
             app.UseAuthentication();
+
+            // Enable cors
+            app.UseCors(options => options
+                .WithOrigins(new[] { "https://localhost:44316" , "https://localhost:5001", "http://localhost:3000" })
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+            );
 
             app.UseAuthorization();
 

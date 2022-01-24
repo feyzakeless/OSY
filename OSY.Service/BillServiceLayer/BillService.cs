@@ -7,11 +7,9 @@ using OSY.Model.ModelBill;
 using OSY.Model.ModelCreditCard;
 using OSY.Service.ApartmentServiceLayer;
 using OSY.Service.ClientServiceLayer;
-using System;
+using OSY.Service.CreditCardServiceLayer;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OSY.Service.BillServiceLayer
 {
@@ -19,12 +17,14 @@ namespace OSY.Service.BillServiceLayer
     {
         private readonly IMapper mapper;
         private readonly IApartmentService apartmentService;
-        private readonly IMongoCollection<CreditCardViewModel> _creditCards;
-        public BillService(IMapper _mapper, IApartmentService _apartmentService, IDbClient dbClient)
+        private readonly ICreditCardService creditCardService;
+
+        public BillService(IMapper _mapper, IApartmentService _apartmentService, ICreditCardService _creditCardService)
         {
             mapper = _mapper;
             apartmentService = _apartmentService;
-            _creditCards = dbClient.GetCardsCollection();
+            creditCardService = _creditCardService;
+            
         }
 
         // Fatura Listeleme İslemi
@@ -160,8 +160,45 @@ namespace OSY.Service.BillServiceLayer
             return result;
         }
 
+        // Tek Fatura Atama İslemi
+        public General<BillViewModel> PostBill(int id, decimal price, AssignBillViewModel newBills)
+        {
+            var result = new General<BillViewModel>();
+            var billModel = mapper.Map<OSY.DB.Entities.Bill>(newBills);
+
+            using (var context = new OSYContext())
+            {
+                var checkDate = context.Bill.FirstOrDefault(x => x.Idate == newBills.Idate && x.BillType == newBills.BillType
+                                && x.Iapartment == id);
+                if (checkDate is not null)
+                {
+                    result.ExceptionMessage = "Girilen fatura türüne ve tarihe ait faturalandırma mevcuttur. Lütfen doğru tarih veya doğru fatura türü giriniz.";
+                    return result;
+                }
+
+                var apartmentCheck = context.Apartment.FirstOrDefault(x => x.IsFull && x.Id == id);
+
+                if (apartmentCheck is null)
+                {
+                    result.ExceptionMessage = "Bu dairede ikamet yoktur, fatura atanamaz !";
+                    return result;
+                }
+
+                billModel.Iapartment = id;
+                billModel.Price = price;
+                context.Bill.Add(billModel);
+                context.SaveChanges();
+
+                result.Entity = mapper.Map<BillViewModel>(billModel);
+                result.IsSuccess = true;
+                result.SuccessMessage = newBills.BillType + ", faturası oluşturuldu !";
+            }
+
+            return result;
+        }
+
         // Toplu Fatura/Aidat Atama İslemi
-        public General<BillViewModel> PostBill(decimal totalPrice, AssignBillViewModel newBills)
+        public General<BillViewModel> PostTotalBill(decimal totalPrice, AssignBillViewModel newBills)
         {
 
             var result = new General<BillViewModel>();
@@ -313,21 +350,50 @@ namespace OSY.Service.BillServiceLayer
 
         }
 
-        // MongoDB ye Cart Bilgisi Ekleme
-        public CreditCardViewModel AddCard(CreditCardViewModel card)
-        {
-            _creditCards.InsertOne(card);
-            return card;
-        }
-
-        // Toplu Ödeme İslemi
-        public General<BillViewModel> PayLumpSum(string billType, CreditCardViewModel cardModel)
+        // Tek Ödeme İslemi
+        public General<BillViewModel> PayBill(string billType, InsertCreditCardModel cardModel)
         {
             var result = new General<BillViewModel>();
 
             using (var context = new OSYContext())
             {
-                var billList = context.Bill.Where(x => x.Iapartment == cardModel.ApartmentId && x.BillType == billType && !x.IsPaid);
+                var bill = context.Bill.FirstOrDefault(x => x.BillType.ToLower() == billType.ToLower() && x.Iapartment == cardModel.ApartmentId
+                            && !x.IsPaid);
+
+                if(bill is null)
+                {
+                    result.ExceptionMessage = "Fatura bulunamadı";
+                    return result;
+                }
+
+                decimal paidAmount = bill.Price;
+                var addCartCheck = creditCardService.AddCreditCard(cardModel, paidAmount);
+                if (addCartCheck.IsSuccess == false)
+                {
+                    result.ExceptionMessage = "Girilen tarih bilgisi hatalı. Lütfen doğru tarih bilgisi giriniz!";
+                    return result;
+                }
+
+                bill.IsPaid = true;
+                result.SuccessMessage = billType + " fatura ödemesi gerçekleşti !";
+                result.IsSuccess = true;
+
+                context.SaveChanges();
+
+            }
+
+            return result;
+        }
+
+        // Toplu Ödeme İslemi
+        public General<BillViewModel> PayLumpSum(string billType, InsertCreditCardModel cardModel)
+        {
+            var result = new General<BillViewModel>();
+
+            using (var context = new OSYContext())
+            {
+                var billList = context.Bill.Where(x => x.Iapartment == cardModel.ApartmentId && x.BillType.ToLower() == billType.ToLower() 
+                                && !x.IsPaid);
 
                 decimal totalUnPaid = 0;
 
@@ -335,21 +401,30 @@ namespace OSY.Service.BillServiceLayer
                 {
                     totalUnPaid += item.Price;
 
-
                     if (totalUnPaid > 0)
                     {
-                        AddCard(cardModel);
                         item.IsPaid = true;
-                        result.SuccessMessage = "Toplu ödeme başarılı!";
-                        result.IsSuccess = true;
                     }
                     else
                     {
                         result.ExceptionMessage = "Ödeme başarısız, lütfen bilgileri kontrol edin!";
+                        return result;
                     }
-
+                        
                 }
 
+                
+                
+                var addCartCheck = creditCardService.AddCreditCard(cardModel, totalUnPaid);
+                if (addCartCheck.IsSuccess == false)
+                {
+                    result.ExceptionMessage = "Girilen tarih bilgisi hatalı. Lütfen doğru tarih bilgisi giriniz!";
+                    return result;
+                }
+
+                result.SuccessMessage = "Toplu ödeme başarılı!";
+                result.IsSuccess = true;
+                
                 context.SaveChanges();
 
             }

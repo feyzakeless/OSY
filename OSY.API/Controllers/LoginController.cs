@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -40,7 +41,16 @@ namespace OSY.API.Controllers
             if(user is not null) // Eğer dogrulama sağlandıysa token a atılır. 
             {
                 var token = Generate(user);
+
+                // Cookie ye jwt tokenı ekleme
+                Response.Cookies.Append(key: "jwt", value: token, new CookieOptions
+                {
+                    HttpOnly = true
+                });
+
                 return Ok(token);
+
+                
             }
             return NotFound("Kullanıcı bulunamadı.");
         }
@@ -53,6 +63,7 @@ namespace OSY.API.Controllers
 
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Surname, user.Surname),
@@ -66,6 +77,7 @@ namespace OSY.API.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
 
         // Kimlik dogrulama
         private ResidentViewModel Authenticate(LoginViewModel userLogin)
@@ -88,6 +100,16 @@ namespace OSY.API.Controllers
                 return currentUser;
             }
 
+        }
+
+        [HttpPost("logout")]
+        public IActionResult LogOut()
+        {
+            Response.Cookies.Delete("jwt");
+            return Ok(new
+            {
+                message = "Cookie silme işlemi başarılı !"
+            });
         }
 
     }

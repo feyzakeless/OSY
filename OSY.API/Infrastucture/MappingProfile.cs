@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using OSY.Model.ModelApartment;
 using OSY.Model.ModelBill;
+using OSY.Model.ModelCreditCard;
 using OSY.Model.ModelHousing;
 using OSY.Model.ModelLogin;
+using OSY.Model.ModelMessage;
 using OSY.Model.ModelResident;
 
 namespace OSY.API.Infrastucture
@@ -38,6 +40,20 @@ namespace OSY.API.Infrastucture
 
             CreateMap<AssignBillViewModel, OSY.DB.Entities.Bill>();
             CreateMap<OSY.DB.Entities.Bill, AssignBillViewModel>();
+
+            // Mesaj Mapping
+            CreateMap<MessageViewModel, OSY.DB.Entities.Message>();
+            CreateMap<OSY.DB.Entities.Message, MessageViewModel>();
+
+            CreateMap<SendMessageViewModel, OSY.DB.Entities.Message>();
+            CreateMap<OSY.DB.Entities.Message, SendMessageViewModel>();
+
+            // Kredi Kartı Mapping
+            CreateMap<CreditCardViewModel, OSY.DB.MongoDB.MongoEntities.CreditCard>();
+            CreateMap<OSY.DB.MongoDB.MongoEntities.CreditCard, CreditCardViewModel >();
+
+            CreateMap<InsertCreditCardModel, OSY.DB.MongoDB.MongoEntities.CreditCard>();
+            CreateMap<OSY.DB.MongoDB.MongoEntities.CreditCard, InsertCreditCardModel>();
         }
     }
 }

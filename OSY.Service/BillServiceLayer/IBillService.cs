@@ -16,7 +16,9 @@ namespace OSY.Service.BillServiceLayer
         public General<BillViewModel> GetUnPaidBillList();
         public General<BillViewModel> Update(BillViewModel medicine, int id);
         public General<BillViewModel> Delete(int id);
-        public General<BillViewModel> PostBill(decimal totalPrice, AssignBillViewModel newBills);
-        public General<BillViewModel> PayLumpSum(string type, CreditCardViewModel cardModel);
+        public General<BillViewModel> PostBill(int id, decimal price, AssignBillViewModel newBills);
+        public General<BillViewModel> PostTotalBill(decimal totalPrice, AssignBillViewModel newBills);
+        public General<BillViewModel> PayBill(string billType, InsertCreditCardModel cardModel);
+        public General<BillViewModel> PayLumpSum(string billType, InsertCreditCardModel cardModel);
     }
 }
