@@ -21,6 +21,7 @@ namespace OSY.DB.Entities.DataContext
         public virtual DbSet<Apartment> Apartment { get; set; }
         public virtual DbSet<Bill> Bill { get; set; }
         public virtual DbSet<Housing> Housing { get; set; }
+        public virtual DbSet<Message> Message { get; set; }
         public virtual DbSet<Resident> Resident { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -76,6 +77,27 @@ namespace OSY.DB.Entities.DataContext
                 entity.Property(e => e.BlokName)
                     .IsRequired()
                     .HasMaxLength(10);
+            });
+
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.Property(e => e.Idate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.MessageText).IsRequired();
+
+                entity.HasOne(d => d.Recevier)
+                    .WithMany(p => p.MessageRecevier)
+                    .HasForeignKey(d => d.RecevierId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Message_Resident");
+
+                entity.HasOne(d => d.Sender)
+                    .WithMany(p => p.MessageSender)
+                    .HasForeignKey(d => d.SenderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Message_Resident1");
             });
 
             modelBuilder.Entity<Resident>(entity =>
